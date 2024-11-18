@@ -51,7 +51,9 @@ class GradeCalculator:
     def resubmission_eligibility(self):
         """List formative assignments below the passing threshold."""
         return [a for a in self.assignments if a.a_type == 'FA' and a.score < 50]
-
+    def summative_to_retake(self):
+        """List summative assignments below 50% that need retaking."""
+        return [a for a in self.assignments if a.a_type == 'SA' and a.score < 50]
     def display_transcript(self, order='asc'):
         """Print the transcript sorted by score."""
         reverse = order.lower() == 'desc'
@@ -94,7 +96,12 @@ def main():
             print(f"- {a.name}: {a.score}%")
     else:
         print("\nGreat job! No retakes required.")
-
+        # Identify retakes for summative assignments
+    retakes = calc.summative_to_retake()
+    if resubmissions:
+        print("\nAssignments to Retake (Summative):")
+    for a in retakes:
+        print(f"- {a.name}: {a.score}%")
     order = input("\nHow would you like the transcript printed? \nAscending order(asc)/ (desc)Descending order: ").strip()
     calc.display_transcript(order)
 
